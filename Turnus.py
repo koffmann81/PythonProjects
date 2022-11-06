@@ -101,7 +101,7 @@ with st.sidebar:
     endDateFormat=endDate.strftime("%d/%m/%y")
     a=startEndWeek(startDateFormat, endDateFormat)
     #st.write(a)
-    st.write("Has data from 26.sep 2022 and "+numWeeks "forward")
+    st.write("Has data from 26.sep 2022 and "+str(numWeeks) +" weeks forward")
 turnusStreamlit=turnus.iloc[a[0]:a[1], :9]
 st.dataframe(turnusStreamlit, height=450)
 
