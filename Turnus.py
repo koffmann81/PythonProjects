@@ -22,6 +22,7 @@ planUker={1:planUke1, 2:planUke2, 3:planUke3, 4:planUke4, 5:planUke5, 6:planUke6
 
 dfPlan=pd.DataFrame(list(planUker.values()), columns=days)
 
+
 numWeeks=200
 
 turnusOverview=[]
@@ -100,6 +101,7 @@ with st.sidebar:
     endDateFormat=endDate.strftime("%d/%m/%y")
     a=startEndWeek(startDateFormat, endDateFormat)
     #st.write(a)
+    st.write("Has data from 26.sep 2022 and "+numWeeks "forward")
 turnusStreamlit=turnus.iloc[a[0]:a[1], :9]
 st.dataframe(turnusStreamlit, height=450)
 
