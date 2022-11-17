@@ -10,7 +10,7 @@ import pandas as pd
 
 tickersDict = {"SP500":"^GSPC", "Bitcoin":"BTC-USD", "USDNOK":"USDNOK=X", "Oslo Børs":"OSEBX.OL"}
 tickers=list(tickersDict.values())
-names=st.multiselect("Select tickers", tickersDict.keys(),list(tickersDict.keys())[:2])
+names=st.multiselect("Select tickers", tickersDict.keys(),list(tickersDict.keys()))
 tickerList=[tickersDict[x] for x in names]
 
 current_price =web.get_quote_yahoo(tickers)["regularMarketPrice"]
