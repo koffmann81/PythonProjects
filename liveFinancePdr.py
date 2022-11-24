@@ -30,6 +30,9 @@ tupleTicker=[x[0] for x in data_tuple]
 
 df=pd.DataFrame(data_tuple, columns=["Name", "Price", "Return 1-day"])
 df=df.set_index("Name")
+
+#----THE APP---
+st.title("Financial prices and returns")
 selectedTickers=st.multiselect("Select tickers", tupleTicker,tupleTicker)
 
 #data_tuple=list(zip(selectedTickers,tuplePrices, tupleReturns))
