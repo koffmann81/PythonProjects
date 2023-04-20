@@ -1,0 +1,17 @@
+import streamlit as st
+import random
+
+def main():
+    st.title("Random Number Generator")
+    
+    # Get the user input
+    min_value = st.number_input("Enter the minimum value:")
+    max_value = st.number_input("Enter the maximum value:")
+    
+    # Generate the random number
+    if st.button("Generate"):
+        random_number = random.randint(min_value, max_value)
+        st.write(f"Random number between {min_value} and {max_value}: {random_number}")
+        
+if __name__ == "__main__":
+    main()
