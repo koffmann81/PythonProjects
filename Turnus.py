@@ -3,18 +3,18 @@ import pandas as pd
 import streamlit as st
 
 #Empty list of 12 weeks
-planUke1=["F2", "D", "A2", "A2", "D", "F2", "F1"]
+planUke1=["D", "D", "A2", "A2", "D", "F2", "F1"]
 planUke2=["A", "D", "D", "D", "F2", "F2", "F1"]
 planUke3=["D", "D", "D", "F1", "A", "D", "A"]
-planUke4=["D", "D", "A2", "A2", "F2", "F2", "F1"]
-planUke5=["F2", "F2", "A2", "D", "D", "F2", "F1"]
-planUke6=["D", "D", "D", "F1", "A", "A", "D"]
-planUke7=["D", "D", "F2", "A2", "D", "F2", "F1"]
+planUke4=["F2", "D", "A2", "A2", "F2", "F2", "F1"]
+planUke5=["F2", "D", "A2", "D", "D", "F2", "F1"]
+planUke6=["D", "D", "D", "A", "D", "F2", "F1"]
+planUke7=["D", "D", "D", "A2", "D", "F2", "F1"]
 planUke8=["A", "D", "A", "D", "D", "F2", "F1"]
 planUke9=["D", "D", "D", "F1", "A", "D", "A"]
 planUke10=["D", "F2", "D", "D", "F2", "F2" ,"F1"]
 planUke11=["A", "D", "D", "D", "D", "F2", "F1"]
-planUke12=["A", "D", "F1", "D", "A", "A", "D"]
+planUke12=["A", "D", "D", "D", "D", "F2", "F1"]
 days=["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"]
 
 planListe=[]
