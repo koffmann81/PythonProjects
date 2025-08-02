@@ -3,35 +3,35 @@ import pandas as pd
 
 # Shift schedule data
 
-planUke1=[“D”, “D”, “A2”, “A2”, “D”, “F2”, “F1”]
-planUke2=[“A”, “D”, “D”, “D”, “F2”, “F2”, “F1”]
-planUke3=[“D”, “D”, “D”, “F1”, “A”, “D”, “A”]
-planUke4=[“F2”, “D”, “A2”, “A2”, “F2”, “F2”, “F1”]
-planUke5=[“F2”, “D”, “A2”, “D”, “D”, “F2”, “F1”]
-planUke6=[“D”, “D”, “D”, “A”, “D”, “F2”, “F1”]
-planUke7=[“D”, “D”, “D”, “A2”, “D”, “F2”, “F1”]
-planUke8=[“A”, “D”, “A”, “D”, “D”, “F2”, “F1”]
-planUke9=[“D”, “D”, “D”, “F1”, “A”, “D”, “A”]
-planUke10=[“D”, “F2”, “D”, “D”, “F2”, “F2” ,“F1”]
-planUke11=[“A”, “D”, “D”, “D”, “D”, “F2”, “F1”]
-planUke12=[“A”, “D”, “D”, “D”, “D”, “F2”, “F1”]
+planUke1=["D", "D", "A2", "A2", "D", "F2", "F1"]
+planUke2=["A", "D", "D", "D", "F2", "F2", "F1"]
+planUke3=["D", "D", "D", "F1", "A", "D", "A"]
+planUke4=["F2", "D", "A2", "A2", "F2", "F2", "F1"]
+planUke5=["F2", "D", "A2", "D", "D", "F2", "F1"]
+planUke6=["D", "D", "D", "A", "D", "F2", "F1"]
+planUke7=["D", "D", "D", "A2", "D", "F2", "F1"]
+planUke8=["A", "D", "A", "D", "D", "F2", "F1"]
+planUke9=["D", "D", "D", "F1", "A", "D", "A"]
+planUke10=["D", "F2", "D", "D", "F2", "F2" ,"F1"]
+planUke11=["A", "D", "D", "D", "D", "F2", "F1"]
+planUke12=["A", "D", "D", "D", "D", "F2", "F1"]
 
-days=[“Man”, “Tir”, “Ons”, “Tor”, “Fre”, “Lør”, “Søn”]
+days=["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"]
 planUker={1:planUke1, 2:planUke2, 3:planUke3, 4:planUke4, 5:planUke5, 6:planUke6,
 7:planUke7, 8:planUke8, 9:planUke9, 10:planUke10, 11:planUke11, 12:planUke12}
 
 def weekOutput(Monday):
-“”“Function returning weekDates for a given Monday”””
+"""Function returning weekDates for a given Monday"""
 weekDates = []
 weekDates.append(Monday)
 for i in range(6):
 dayafter=weekDates[i] + dt.timedelta(days=1)
 weekDates.append(dayafter)
-weekDates = [x.strftime(”%d/%m/%y”) for x in weekDates]
+weekDates = [x.strftime("%d/%m/%y") for x in weekDates]
 return weekDates
 
 def startEndWeek(start, end, weeks):
-“”“Find start and end indices for date filtering”””
+"""Find start and end indices for date filtering"""
 startIndex = None
 endIndex = None
 
@@ -45,10 +45,10 @@ return (startIndex, endIndex)
 ```
 
 def generate_full_turnus_dataframe(numWeeks=300):
-“””
+"""
 Generate the complete turnus dataframe
 This is the core logic from your Turnus.py
-“””
+"""
 turnusOverview = []
 refMonday = dt.datetime(2022, 9, 26)
 turnusMapping = []
@@ -100,9 +100,9 @@ return turnus, weeks
 ```
 
 def get_current_week_dataframe():
-“””
+"""
 Get the current week’s schedule (for email)
-“””
+"""
 turnus, weeks = generate_full_turnus_dataframe()
 
 ```
@@ -126,9 +126,9 @@ return turnus.iloc[:4]
 ```
 
 def get_filtered_dataframe(start_date, end_date):
-“””
+"""
 Get dataframe filtered by date range (for Streamlit)
-“””
+"""
 turnus, weeks = generate_full_turnus_dataframe()
 
 ```
@@ -147,11 +147,11 @@ return pd.DataFrame()
 ```
 
 def format_dataframe_for_email(df):
-“””
+"""
 Format dataframe for email
-“””
+"""
 if df.empty:
-return “<p>No data available for the current period.</p>”, “No data available.”
+return "<p>No data available for the current period.</p>", "No data available."
 
 ```
 # HTML version with Norwegian styling
@@ -199,16 +199,16 @@ text_content = f"""
 
 Total weeks: {len(df)}
 Shift codes: D=Day, A=?, A2=?, F1=?, F2=?
-“””
+"""
 
 ```
 return html_content, text_content
 ```
 
 def get_schedule_summary(df):
-“””
+"""
 Get summary statistics for the schedule
-“””
+"""
 if df.empty:
 return {}
 
