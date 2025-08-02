@@ -13,8 +13,14 @@ with st.sidebar:
   dt.datetime.today())
   endDate = st.date_input("End Date (default 12 weeks after start)", startDate + dt.timedelta(weeks=12))
 
-´´´
-st.write("Has data from 26.sep 2022 and "+str(numWeeks) +" weeks forward")
-´´´
+
+  st.write("Has data from 26.sep 2022 and "+str(numWeeks) +" weeks forward")
+
 
 # Get filtered dataframe using the new function
+# Display the dataframe
+
+if not turnusStreamlit.empty:
+  st.dataframe(turnusStreamlit, height=450)
+else:
+  st.warning(“No data available for the selected date range. Please check your dates.”)
