@@ -23,7 +23,7 @@ planUker={1:planUke1, 2:planUke2, 3:planUke3, 4:planUke4, 5:planUke5, 6:planUke6
 dfPlan=pd.DataFrame(list(planUker.values()), columns=days)
 
 
-numWeeks=200
+numWeeks=300
 
 turnusOverview=[]
 #Hard Start
