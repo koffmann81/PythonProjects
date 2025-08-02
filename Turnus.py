@@ -23,4 +23,4 @@ with st.sidebar:
 if not turnusStreamlit.empty:
   st.dataframe(turnusStreamlit, height=450)
 else:
-  st.warning(“No data available for the selected date range. Please check your dates.”)
+  st.warning("No data available for the selected date range. Please check your dates.")
