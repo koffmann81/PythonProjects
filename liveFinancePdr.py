@@ -7,8 +7,12 @@ tickersDict = {
     "SP500": "^GSPC",
     "Bitcoin": "BTC-USD",
     "USDNOK": "USDNOK=X",
-    "Oslo Børs": "OSEBX.OL"
+    "Oslo Børs": "OSEBX.OL",
+    "Kongsberg Gruppen": "KOG.OL",
+    "Europris": "EPR.OL",
+    "SATS": "SATS.OL"
 }
+
 
 names = list(tickersDict.keys())
 tickers = list(tickersDict.values())
