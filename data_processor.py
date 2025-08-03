@@ -167,7 +167,7 @@ def format_dataframe_for_email(df):
 {df.to_string()}
 
 Total weeks: {len(df)}
-Shift codes: D=Day, A=?, A2=?, F1=?, F2=?
+Shift codes: D=Day, A=AfternoonLate, A2=AfternoonEarly, F1=Off, F2=Off
 """
     return html_content, text_content
 
