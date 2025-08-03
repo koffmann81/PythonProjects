@@ -34,11 +34,11 @@ try:
         auto_adjust=True
     )
 except Exception as e:
-    st.error(f"Failed to download data: {e}")
+    st.error(f"❌ Failed to download data: {e}")
     st.stop()
 
 if data.empty:
-    st.warning("No data returned from Yahoo Finance.")
+    st.warning("⚠️ No data returned from Yahoo Finance.")
     st.stop()
 
 # --- Parse & Calculate ---
@@ -52,7 +52,11 @@ for name, symbol in tickersDict.items():
 
         current = df["Close"].iloc[-1]
         previous = df["Close"].iloc[-2] if len(df) >= 2 else None
-        price_30d_ago = df[df.index >= pd.to_datetime(start_30d)]["Close"].iloc[0] if len(df[df.index >= pd.to_datetime(start_30d)]) > 0 else None
+
+        # ✅ Updated: 30-day return based on last available business day before or on that date
+        mask_30d = df.index <= pd.to_datetime(start_30d)
+        price_30d_ago = df.loc[mask_30d]["Close"].iloc[-1] if mask_30d.any() else None
+
         price_ytd = df["Close"].iloc[0]
 
         return_1d = (current / previous - 1) * 100 if previous else None
@@ -60,43 +64,4 @@ for name, symbol in tickersDict.items():
         return_ytd = (current / price_ytd - 1) * 100 if price_ytd else None
 
         rows.append({
-            "Name": name,
-            "Price": current,
-            "Return 1-day": f"{return_1d:.2f}%" if return_1d is not None else "N/A",
-            "Return 30-day": f"{return_30d:.2f}%" if return_30d is not None else "N/A",
-            "Return YTD": f"{return_ytd:.2f}%" if return_ytd is not None else "N/A"
-        })
-
-    except Exception as e:
-        rows.append({
-            "Name": name,
-            "Price": "Error",
-            "Return 1-day": "Error",
-            "Return 30-day": "Error",
-            "Return YTD": "Error"
-        })
-
-# --- Create DataFrame ---
-df = pd.DataFrame(rows).set_index("Name")
-
-# --- STREAMLIT UI ---
-st.title("📈 Financial Prices and Returns")
-
-if df.empty:
-    st.warning("No financial data available for display.")
-    st.stop()
-
-selectedTickers = st.multiselect("Select tickers", df.index.tolist(), df.index.tolist())
-
-if not selectedTickers:
-    st.info("Please select at least one ticker to display.")
-else:
-    filtered_df = df.loc[selectedTickers]
-
-    def safe_float_format(x):
-        try:
-            return f"{float(x):.2f}"
-        except:
-            return x
-
-    st.dataframe(filtered_df.style.format({"Price": safe_float_format}))
+            "Name": nam
