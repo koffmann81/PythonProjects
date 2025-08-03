@@ -64,4 +64,43 @@ for name, symbol in tickersDict.items():
         return_ytd = (current / price_ytd - 1) * 100 if price_ytd else None
 
         rows.append({
-            "Name": nam
+            "Name": name,
+            "Price": current,
+            "Return 1-day": f"{return_1d:.2f}%" if return_1d is not None else "N/A",
+            "Return 30-day": f"{return_30d:.2f}%" if return_30d is not None else "N/A",
+            "Return YTD": f"{return_ytd:.2f}%" if return_ytd is not None else "N/A"
+        })
+
+    except Exception as e:
+        rows.append({
+            "Name": name,
+            "Price": "Error",
+            "Return 1-day": "Error",
+            "Return 30-day": "Error",
+            "Return YTD": "Error"
+        })
+
+# --- Create DataFrame ---
+df = pd.DataFrame(rows).set_index("Name")
+
+# --- STREAMLIT UI ---
+st.title("📈 Financial Prices and Returns")
+
+if df.empty:
+    st.warning("No financial data available for display.")
+    st.stop()
+
+selectedTickers = st.multiselect("Select tickers", df.index.tolist(), df.index.tolist())
+
+if not selectedTickers:
+    st.info("Please select at least one ticker to display.")
+else:
+    filtered_df = df.loc[selectedTickers]
+
+    def safe_float_format(x):
+        try:
+            return f"{float(x):.2f}"
+        except:
+            return x
+
+    st.dataframe(filtered_df.style.format({"Price": safe_float_format}))
