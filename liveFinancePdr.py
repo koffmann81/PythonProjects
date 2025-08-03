@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 
+#Short URL: bit.ly/4lVGJNV
 # --- Define tickers ---
 tickersDict = {
     "SP500": "^GSPC",
