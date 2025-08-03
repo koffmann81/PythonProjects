@@ -1,44 +1,52 @@
-import pandas_datareader as web
+import yfinance as yf
 import streamlit as st
 import pandas as pd
 
-#tickers = ["MSFT", "BTC-USD", "^GSPC", "EURUSD=X"]
+# Define tickers
+tickersDict = {
+    "SP500": "^GSPC",
+    "Bitcoin": "BTC-USD",
+    "USDNOK": "USDNOK=X",
+    "Oslo Børs": "OSEBX.OL"
+}
 
-#current_price = web.get_quote_yahoo(tickers)["regularMarketPrice"]
-#print(web.get_quote_yahoo(tickers))
-#a=web.get_quote_yahoo(tickers) 84 columns
+names = list(tickersDict.keys())
+tickers = list(tickersDict.values())
 
-tickersDict = {"SP500":"^GSPC", "Bitcoin":"BTC-USD", "USDNOK":"USDNOK=X", "Oslo Børs":"OSEBX.OL"}
-tickers=list(tickersDict.values())
-#names=st.multiselect("Select tickers", tickersDict.keys(),list(tickersDict.keys()))
-names=tickersDict.keys()
-tickerList=[tickersDict[x] for x in names]
+# Fetch data using yfinance
+price_data = {}
+returns = {}
 
-current_price =web.get_quote_yahoo(tickers)["regularMarketPrice"]
-previous_close=web.get_quote_yahoo(tickers)["regularMarketPreviousClose"]
-returns=list((current_price/previous_close-1)*100)
-returns=["%.2f" % elem for elem in returns]
-returns=[elem+"%" for elem in returns]
-#returns="{:.2f}".format(returns)
+for name, symbol in tickersDict.items():
+    try:
+        ticker = yf.Ticker(symbol)
+        info = ticker.info
+        current = info.get("regularMarketPrice", None)
+        previous = info.get("regularMarketPreviousClose", None)
 
-#Creating a dataframe with names and price
-data_tuple=list(zip(names,current_price, returns))
-tupleTicker=[x[0] for x in data_tuple]
+        if current is not None and previous is not None:
+            daily_return = (current / previous - 1) * 100
+            price_data[name] = current
+            returns[name] = f"{daily_return:.2f}%"
+        else:
+            price_data[name] = "N/A"
+            returns[name] = "N/A"
+    except Exception as e:
+        price_data[name] = "Error"
+        returns[name] = "Error"
 
-#tuplePrices=[x[1] for x in data_tuple]
-#tupleReturns=[x[2] for x in data_tuple]
+# Build dataframe
+df = pd.DataFrame({
+    "Name": list(price_data.keys()),
+    "Price": list(price_data.values()),
+    "Return 1-day": list(returns.values())
+})
+df = df.set_index("Name")
 
-df=pd.DataFrame(data_tuple, columns=["Name", "Price", "Return 1-day"])
-df=df.set_index("Name")
+# ---- STREAMLIT APP ----
+st.title("📈 Financial Prices and Returns")
 
-#----THE APP---
-st.title("Financial prices and returns")
-selectedTickers=st.multiselect("Select tickers", tupleTicker,tupleTicker)
+selectedTickers = st.multiselect("Select tickers", df.index.tolist(), df.index.tolist())
+filtered_df = df.loc[selectedTickers]
 
-#data_tuple=list(zip(selectedTickers,tuplePrices, tupleReturns))
-df=df.loc[selectedTickers]
-
-st.dataframe(df.style.format({"Price":"{:.1f}"}))
-
-
-
+st.dataframe(filtered_df.style.format({"Price": "{:.2f}"}))
