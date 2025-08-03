@@ -65,4 +65,11 @@ st.title("📈 Financial Prices and Returns")
 selectedTickers = st.multiselect("Select tickers", df.index.tolist(), df.index.tolist())
 filtered_df = df.loc[selectedTickers]
 
-st.dataframe(filtered_df.style.format({"Price": "{:.2f}"}))
+def safe_float_format(x):
+    try:
+        return f"{float(x):.2f}"
+    except:
+        return x
+
+st.dataframe(filtered_df.style.format({"Price": safe_float_format}))
+
