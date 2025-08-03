@@ -14,41 +14,52 @@ tickersDict = {
     "SATS": "SATS.OL"
 }
 
-# Timeframes
+names = list(tickersDict.keys())
+symbols = list(tickersDict.values())
+
+# Time windows
 today = datetime.today()
 start_30d = today - timedelta(days=30)
-start_ytd = datetime(today.year, 1, 2)  # 1 Jan may be a holiday
+start_ytd = datetime(today.year, 1, 2)
 
-# Initialize data holders
-data_rows = []
+# Download all data at once
+data = yf.download(
+    tickers=symbols,
+    start=start_ytd.strftime("%Y-%m-%d"),
+    end=today.strftime("%Y-%m-%d"),
+    group_by="ticker",
+    progress=False,
+    auto_adjust=True  # adjusted close prices
+)
 
-# Fetch and compute returns
+# Prepare output
+rows = []
+
 for name, symbol in tickersDict.items():
     try:
-        hist = yf.download(symbol, start=start_ytd.strftime("%Y-%m-%d"), end=today.strftime("%Y-%m-%d"), progress=False)
-        if hist.empty or "Close" not in hist:
-            raise ValueError("No data")
+        df = data[symbol] if isinstance(data, dict) else data[symbol]
+        if df.empty or "Close" not in df.columns:
+            raise ValueError("No close data")
 
-        current = hist["Close"][-1]
-        previous = hist["Close"][-2] if len(hist) >= 2 else None
-        price_30d_ago = hist.loc[hist.index >= pd.to_datetime(start_30d)].iloc[0]["Close"] if len(hist.loc[hist.index >= pd.to_datetime(start_30d)]) > 0 else None
-        price_ytd = hist.iloc[0]["Close"]
+        current = df["Close"].iloc[-1]
+        previous = df["Close"].iloc[-2] if len(df) >= 2 else None
+        price_30d_ago = df[df.index >= pd.to_datetime(start_30d)]["Close"].iloc[0] if len(df[df.index >= pd.to_datetime(start_30d)]) > 0 else None
+        price_ytd = df["Close"].iloc[0]
 
-        # Calculate returns
-        daily_return = ((current / previous) - 1) * 100 if previous else None
-        return_30d = ((current / price_30d_ago) - 1) * 100 if price_30d_ago else None
-        return_ytd = ((current / price_ytd) - 1) * 100 if price_ytd else None
+        return_1d = (current / previous - 1) * 100 if previous else None
+        return_30d = (current / price_30d_ago - 1) * 100 if price_30d_ago else None
+        return_ytd = (current / price_ytd - 1) * 100 if price_ytd else None
 
-        data_rows.append({
+        rows.append({
             "Name": name,
             "Price": current,
-            "Return 1-day": f"{daily_return:.2f}%" if daily_return is not None else "N/A",
+            "Return 1-day": f"{return_1d:.2f}%" if return_1d is not None else "N/A",
             "Return 30-day": f"{return_30d:.2f}%" if return_30d is not None else "N/A",
             "Return YTD": f"{return_ytd:.2f}%" if return_ytd is not None else "N/A"
         })
 
     except Exception as e:
-        data_rows.append({
+        rows.append({
             "Name": name,
             "Price": "Error",
             "Return 1-day": "Error",
@@ -56,20 +67,4 @@ for name, symbol in tickersDict.items():
             "Return YTD": "Error"
         })
 
-# Convert to DataFrame
-df = pd.DataFrame(data_rows).set_index("Name")
-
-# ---- STREAMLIT APP ----
-st.title("📈 Financial Prices and Returns")
-
-selectedTickers = st.multiselect("Select tickers", df.index.tolist(), df.index.tolist())
-filtered_df = df.loc[selectedTickers]
-
-def safe_float_format(x):
-    try:
-        return f"{float(x):.2f}"
-    except:
-        return x
-
-st.dataframe(filtered_df.style.format({"Price": safe_float_format}))
-
+#
