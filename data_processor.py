@@ -158,7 +158,7 @@ def format_dataframe_for_email(df):
     <h3>Turnus Schedule</h3>
     {html_table}
     <p><strong>Total weeks:</strong> {len(df)}</p>
-    <p><strong>Shift codes:</strong> D=Day, A=Afternoon230, A2=Afternoon120, F1=DayOff, F2=DayOff</p>
+    <p><strong>Shift codes:</strong> D=Day, A=Afternoon230, A2=Afternoon130, F1=DayOff, F2=DayOff</p>
     """
 
     text_content = f"""
