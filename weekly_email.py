@@ -83,7 +83,7 @@ tr:nth-child(even) {{ background-color: #f9f9f9; }}
 </style>
 </head>
 <body>
-<h2>📅 Weekly Turnus Schedule</h2>
+<h2>📅 Weekly Turnus Schedules</h2>
 
 <div class="info-box">
 <strong>Generated:</strong> {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} UTC<br>
