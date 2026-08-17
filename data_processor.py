@@ -98,7 +98,7 @@ def get_current_week_dataframe():
             break
 
     if current_week_index is not None:
-        return turnus.iloc[current_week_index:current_week_index + 8]
+        return turnus.iloc[current_week_index:current_week_index + 12]
     else:
         return turnus.iloc[:4]
 
